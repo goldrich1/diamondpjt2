@@ -1,0 +1,74 @@
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+
+                
+              </style>
+                        </head>
+                        <body>
+                            <!-- Thank You Popup -->
+<div id="thankYouPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 90%; width: 400px;">
+    <h3 style="color: #2e7d32; margin: 0;">✅ Thank You, [Name]!</h3>
+    <p style="margin: 15px 0; font-size: 16px;">
+      Your seat is reserved! We’ve sent details to your WhatsApp.<br><br>
+      <strong>Save our number: 0803 589 8092</strong><br>
+      See you at the presentation! 💚
+    </p>
+    <button onclick="closePopup()" style="background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Close</button>
+  </div>
+</div>
+
+<script>
+  function closePopup() {
+    document.getElementById('thankYouPopup').style.display = 'none';
+  }
+
+  // Modify your existing form submit handler
+  document.getElementById('leadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value.replace(/\D/g, '');
+    const location = document.getElementById('location').value;
+    const attendance = document.getElementById('attendance').value;
+    
+    // Update popup with user's name
+    document.querySelector('#thankYouPopup h3').innerHTML = `✅ Thank You, ${name}!`;
+    
+    // Open WhatsApp
+    const message = `Hi Goldrich! I'm ${name} from ${location}. I'd like to attend the ${attendance} presentation. Please send details.`;
+    const whatsappURL = `https://wa.me/2348035898092?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+    
+    // Show popup
+    document.getElementById('thankYouPopup').style.display = 'flex';
+    
+    // Optional: Log to console (you can later replace this with SheetDB)
+    console.log("New Lead:", { name, phone, location, attendance });
+  });
+</script>
+
+
+
+              <script>
+                              // Send data to Google Sheets via SheetDB
+fetch('https://sheetdb.io/api/v1/YOUR_API_ID/write', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+     [{ name, phone, location, attendance }]
+  })
+}).catch(err => console.log("Logging failed:", err));
+
+
+              </script>
+                        </body>
+                        </html>
+                    
